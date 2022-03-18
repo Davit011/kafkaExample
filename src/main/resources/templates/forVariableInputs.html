@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Kafka</title>
+</head>
+<body>
+    <input id="variable" type="text">
+    <button id = "addVariable">Add</button>
+    <button id = "getMessages">Show my last messages</button>
+    <p th:if="${messages}!= null"th:each="message:${messages}" th:text="${message}"></p>
+</body>
+</html>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script>
+    let elementById = document.getElementById('addVariable');
+    let elementById1 = document.getElementById('getMessages');
+    elementById.addEventListener("click", function(){
+            let variable = $('#variable').val();
+            if (variable != null) {
+                $.ajax({
+                    method: "POST",
+                    url: "/kafka/produce",
+                    data: {message: variable},
+                    success: function () {
+                        alert("ok")
+                    }
+                })
+        }
+    })
+    elementById1.addEventListener("click", function(){
+                $.ajax({
+                    method: "GET",
+                    url: "/kafka/consumer",
+                    success: function () {
+                        alert("ok")
+                    }
+                })
+    })
+</script>
